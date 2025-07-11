@@ -1,0 +1,11 @@
+/.venv
+/venv
+/.idea
+/__pycache__ */
+/__pycache__
+/**/__pycache__
+/.env
+/logs
+/.pytest_cache
+/.env
+/app/app.db
