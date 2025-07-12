@@ -45,6 +45,22 @@ async def create_complaint(complaint_dto: ComplaintDto.Create):
     return response
 
 
+@complaint_router.patch(
+    "/check_open_complaints",
+    status_code=status.HTTP_200_OK
+)
+async def check_open_complaints():
+    complaint_dump = {'method': 'patch', 'route': "check_open_complaints"}
+    response = await access_complaint(**complaint_dump)
+    if isinstance(response, HTTPException):
+        return HTTPException(
+            status_code=response.status_code, 
+            detail=response.detail,
+            args=response.args,
+        )
+    return response
+
+
 @complaint_router.delete(
     "/{id}",
     status_code=status.HTTP_200_OK,

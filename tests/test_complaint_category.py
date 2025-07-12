@@ -10,7 +10,7 @@ from app.handlers.complaint_category import classify_text_async
 async def test_category_of_complaint(test_data):
     """Testing classifing category of complaint by GPT3.5-Turbo."""
     for key in test_data.keys():
-        if key == "OTHER_NEUT":
+        if key in ("OTHER_NEUT", "TEST_DATA_FOR_CLOSING"):
             continue
         
         text = test_data[key]["text"]

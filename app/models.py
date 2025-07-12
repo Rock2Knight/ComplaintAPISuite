@@ -15,7 +15,7 @@ class Base(AsyncAttrs, DeclarativeBase):
     __abstract__ = True  # Класс абстрактный, чтобы не создавать отдельную таблицу для него
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    timestamp: Mapped[datetime] = mapped_column(server_default=func.now())
+    timestamp: Mapped[datetime] = mapped_column(default=datetime.now().astimezone())
 
     async def to_dict(self) -> dict:
         """Универсальный метод для конвертации объекта SQLAlchemy в словарь"""

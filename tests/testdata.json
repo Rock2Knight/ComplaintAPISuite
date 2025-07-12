@@ -52,5 +52,61 @@
         "status": "open",
         "sentiment": "neutral",
         "text": "Your tech support helped solve the problem, but could have responded faster."
-    }
+    },
+    "TEST_DATA_FOR_CLOSING": [
+        {
+            "category": "техническая",
+            "status": "open",
+            "sentiment": "positive",
+            "text": "The wait time for order processing took no more than a minute in your service. Great!"
+        },
+        {
+            "category": "техническая",
+            "status": "open",
+            "sentiment": "negative",
+            "text": "The app keeps crashing whenever I try to use the main features. This is really frustrating."
+        },
+        {
+            "category": "техническая",
+            "status": "open",
+            "sentiment": "neutral",
+            "text": "I noticed that the app sometimes takes a few seconds to load, but it's still usable."
+        },
+        {
+            "category": "оплата",
+            "status": "open",
+            "sentiment": "positive",
+            "text": "The payment system is really smooth and secure. I appreciate the clear transaction history."
+        },
+        {
+            "category": "оплата",
+            "status": "open",
+            "sentiment": "negative",
+            "text": "I've been trying to make a payment for hours but it keeps failing. This is unacceptable."
+        },
+        {
+            "category": "оплата",
+            "status": "open",
+            "sentiment": "neutral",
+            "text": "Payment is straightforward, although it would be better if the checks were more detailed."
+        },
+        {
+            "category": "другое",
+            "status": "open",
+            "sentiment": "positive",
+            "text": "The customer support team is really helpful and responsive. They solved my issue quickly."
+        },
+        {
+            "category": "другое",
+            "status": "open",
+            "sentiment": "negative",
+            "text": "Your customer service team is full of boorish people!"
+        },
+        {
+            "category": "другое",
+            "status": "open",
+            "sentiment": "neutral",
+            "text": "Your tech support helped solve the problem, but could have responded faster."
+        }
+    ]
 }

@@ -24,17 +24,16 @@ class ComplaintLoader:
     @connection
     async def create(cls, session: AsyncSession, **kwargs) -> Complaint:
         """Создает новую жалобу."""
+        if "session" in kwargs.keys():
+            kwargs.pop("session")
+
         item = Complaint(**kwargs)
         session.add(item)
         try:
             await session.commit()
             await session.refresh(item)
         except Exception as e:
-            await session.rollback()
-            detail = "Ошибка на стороне API"        
-            if hasattr(e, 'detail'):
-                detail = e.detail
-            raise HTTPException(status_code=500, detail=detail)
+            raise HTTPException(status_code=500, args=e.args, detail=str(e))
         return item
 
 
@@ -42,6 +41,9 @@ class ComplaintLoader:
     @connection
     async def update(cls, session: AsyncSession, **kwargs) -> Complaint | None:
         """Обновляет жалобу."""
+        if "session" in kwargs.keys():
+            kwargs.pop("session")
+
         item_id = kwargs.pop('item_id')
 
         query_select = select(Complaint).filter_by(id=item_id)
@@ -61,11 +63,7 @@ class ComplaintLoader:
             await session.commit()
             await session.refresh(item)
         except Exception as e:
-            await session.rollback()
-            detail = "Ошибка на стороне API"
-            if hasattr(e, 'detail'):
-                detail = e.detail
-            raise HTTPException(status_code=500, detail=detail)
+            raise HTTPException(status_code=500, args=e.args, detail=str(e))
         return item
 
 
@@ -78,11 +76,11 @@ class ComplaintLoader:
 
         if item is None:
             logger.error(f'Complaint {item_id} not found')
-            return HTTPException(status_code=404, detail=f'Complaint {item_id} not found')
+            raise HTTPException(status_code=404, detail=f'Complaint {item_id} not found')
         item = item.first()
         if item is None:
             logger.error(f'Complaint {item_id} not found')
-            return HTTPException(status_code=404, detail=f'Complaint {item_id} not found')
+            raise HTTPException(status_code=404, detail=f'Complaint {item_id} not found')
             
         item_dict = await item.to_dict()
         logger.info(f'Info about {item}:\n {item_dict}')
