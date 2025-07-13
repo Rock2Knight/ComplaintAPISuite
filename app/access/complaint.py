@@ -5,7 +5,8 @@ from fastapi import HTTPException
 from app.handlers import (
     sentiment_analyze, 
     classify_text_async, 
-    check_complaints
+    close_complaint,
+    get_open_complaints
 )
 from app.loaders.complaint import ComplaintLoader
 from app.models import Complaint, Category
@@ -15,6 +16,20 @@ from app.utils.dict_cleaner import remove_keys
 async def access_complaint(**kwargs) -> Optional[Complaint | HTTPException]:
     match kwargs['method']:
         case "get":
+            if kwargs.get('route', None) and kwargs['route'] == "get_open_complaints":
+                open_complaints = await get_open_complaints()
+
+                if not open_complaints:
+                    return []
+
+                complaints_dump = [
+                    await complaint.to_dict() 
+                    for complaint 
+                    in open_complaints
+                ]
+
+                return complaints_dump
+
             item = await ComplaintLoader.get(item_id=kwargs['id'])
             return await item.to_dict()
 
@@ -41,29 +56,15 @@ async def access_complaint(**kwargs) -> Optional[Complaint | HTTPException]:
             return complaint_dump
 
         case "patch":
-            if kwargs["route"] == "check_open_complaints":
-                closed_complaints = await check_complaints()
+            if kwargs.get("route", None) and kwargs["route"] == "close_complaint":
+                kwargs.pop("route")
+                closed_complaint = await close_complaint(**kwargs)
 
-                if not closed_complaints:
-                    return []
+                if not closed_complaint:
+                    return {}
 
-                complaints_dump = [
-                    await complaint.to_dict() 
-                    for complaint 
-                    in closed_complaints
-                ]
-
-                list(map(
-                    lambda x: remove_keys(
-                        keys=["text", "timestamp"], 
-                        data=x
-                    ), 
-                    complaints_dump
-                ))
-                
-                return complaints_dump
+                return await closed_complaint.to_dict()
                 
         case "delete":
-            item_dict = await ComplaintLoader.delete(item_id=kwargs['id'])
-            return item_dict
+            return await ComplaintLoader.delete(item_id=kwargs['id'])
             

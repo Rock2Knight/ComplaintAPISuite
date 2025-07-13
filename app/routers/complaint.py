@@ -8,6 +8,22 @@ complaint_router = APIRouter(prefix="/complaint", tags=["Жалобы"])
 
 
 @complaint_router.get(
+    "/get_open_complaints", 
+    status_code=status.HTTP_200_OK, 
+)
+async def get_open_complaints(response: Response):
+    complaint_dump = {'method': 'get', 'route': "get_open_complaints"}
+    response = await access_complaint(**complaint_dump)
+    if isinstance(response, HTTPException):
+        return HTTPException(
+            status_code=response.status_code, 
+            detail=response.detail,
+            args=response.args,
+        )
+    return response
+
+
+@complaint_router.get(
     "/{id}",
     status_code=status.HTTP_200_OK, 
 )
@@ -46,11 +62,15 @@ async def create_complaint(complaint_dto: ComplaintDto.Create):
 
 
 @complaint_router.patch(
-    "/check_open_complaints",
+    "/close_complaint/{id}",
     status_code=status.HTTP_200_OK
 )
-async def check_open_complaints():
-    complaint_dump = {'method': 'patch', 'route': "check_open_complaints"}
+async def close_complaint(id: int):
+    complaint_dump = {
+        'method': 'patch', 
+        'route': "close_complaint", 
+        'id': id
+    }
     response = await access_complaint(**complaint_dump)
     if isinstance(response, HTTPException):
         return HTTPException(

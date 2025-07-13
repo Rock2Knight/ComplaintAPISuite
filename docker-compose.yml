@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+
+  complaints-api:
+    build: .
+    container_name: complaints-api
+    ports:
+      - "0.0.0.0:8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=Europe/Moscow
+
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=pirojok
+      - N8N_BASIC_AUTH_PASSWORD=&as12*45sa
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - N8N_RUNNERS_ENABLED=true
+      - TZ=Europe/Moscow
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - complaints-api
+
+volumes:
+  n8n_data:
+    driver: local
+
+networks:
+  default:
+    external:
+      name: temp_complaints_network
