@@ -39,8 +39,8 @@ sqlite3 ./app/app.db ".table"
 2. В сервисе *n8n* вы найдете такие строки:
 ```yaml
       - N8N_BASIC_AUTH_ACTIVE=true
-      - N8N_BASIC_AUTH_USER=pirojok
-      - N8N_BASIC_AUTH_PASSWORD=&as12*45sa
+      - N8N_BASIC_AUTH_USER=username
+      - N8N_BASIC_AUTH_PASSWORD=your_password
       - N8N_HOST=localhost
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
